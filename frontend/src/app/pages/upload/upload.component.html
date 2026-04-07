@@ -1,0 +1,24 @@
+<div class="container py-4">
+  <h2 class="mb-3">Upload Document</h2>
+
+  <div class="card shadow-sm p-3">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label class="form-label">Choose file</label>
+        <input type="file" class="form-control" (change)="onFileChange($event)" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Tags (comma separated)</label>
+        <input type="text" class="form-control" formControlName="tags" placeholder="invoice, finance, 2026" />
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger py-2">{{ error }}</div>
+      <div *ngIf="success" class="alert alert-success py-2">{{ success }}</div>
+
+      <button class="btn btn-primary" [disabled]="loading" type="submit">
+        {{ loading ? 'Uploading...' : 'Upload' }}
+      </button>
+    </form>
+  </div>
+</div>

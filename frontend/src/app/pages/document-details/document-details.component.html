@@ -1,0 +1,50 @@
+<div class="container py-4">
+  <h2 class="mb-3">Document Details</h2>
+
+  <div *ngIf="loading" class="alert alert-info">Loading document...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="document && !loading" class="row g-3">
+    <div class="col-12 col-lg-7">
+      <div class="card shadow-sm p-3">
+        <h5>{{ document.originalName }}</h5>
+        <p class="mb-1"><strong>Stored filename:</strong> {{ document.filename }}</p>
+        <p class="mb-1"><strong>Tags:</strong> {{ document.tags.join(', ') || '-' }}</p>
+        <p class="mb-0"><strong>Uploaded:</strong> {{ document.createdAt | date: 'medium' }}</p>
+      </div>
+
+      <div class="card shadow-sm p-3 mt-3">
+        <h6 class="mb-3">Update Tags / Upload New Version</h6>
+        <form [formGroup]="form" (ngSubmit)="saveChanges()">
+          <div class="mb-3">
+            <label class="form-label">Tags (comma separated)</label>
+            <input class="form-control" type="text" formControlName="tags" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">New file version (optional)</label>
+            <input class="form-control" type="file" (change)="onFileChange($event)" />
+          </div>
+          <div *ngIf="success" class="alert alert-success py-2">{{ success }}</div>
+          <button class="btn btn-primary" [disabled]="saving">{{ saving ? 'Saving...' : 'Save Changes' }}</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="card shadow-sm p-3">
+        <h6 class="mb-3">Version History</h6>
+        <ul class="list-group" *ngIf="document.versions?.length; else noVersions">
+          <li class="list-group-item" *ngFor="let version of document.versions">
+            <div class="d-flex justify-content-between">
+              <span>Version {{ version.versionNumber }}</span>
+              <small>{{ version.uploadedAt | date: 'short' }}</small>
+            </div>
+          </li>
+        </ul>
+        <ng-template #noVersions>
+          <p class="text-muted mb-0">No versions available.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

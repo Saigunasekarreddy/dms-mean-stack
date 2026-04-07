@@ -1,0 +1,38 @@
+<div class="container py-4">
+  <h2 class="mb-3">Dashboard</h2>
+
+  <div *ngIf="loading" class="alert alert-info">Loading dashboard...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div class="row g-3 mb-4" *ngIf="!loading && !error">
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h6 class="text-muted">Total Documents</h6>
+          <h3 class="mb-0">{{ documents.length }}</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body d-flex flex-wrap gap-2">
+          <a routerLink="/upload" class="btn btn-primary">Upload Document</a>
+          <a routerLink="/documents" class="btn btn-outline-primary">View Documents</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm" *ngIf="!loading && !error">
+    <div class="card-header">Recent Documents</div>
+    <ul class="list-group list-group-flush" *ngIf="documents.length; else emptyState">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let doc of documents | slice:0:5">
+        <span>{{ doc.originalName }}</span>
+        <a [routerLink]="['/documents', doc._id]" class="btn btn-sm btn-outline-secondary">Details</a>
+      </li>
+    </ul>
+    <ng-template #emptyState>
+      <div class="card-body text-muted">No documents yet.</div>
+    </ng-template>
+  </div>
+</div>
